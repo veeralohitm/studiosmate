@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 // import { VectorMap } from "@react-jvectormap/core";
 import { worldMill } from "@react-jvectormap/world";
 import dynamic from "next/dynamic";
@@ -121,3 +121,4 @@ const CountryMap: React.FC<CountryMapProps> = ({ mapColor }) => {
 };
 
 export default CountryMap;
+ */
