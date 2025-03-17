@@ -1,0 +1,13 @@
+<svg width="200" height="60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Analytics icon -->
+  <g transform="translate(10, 10)">
+    <rect x="0" y="20" width="10" height="30" fill="#4CAF50" />
+    <rect x="15" y="10" width="10" height="40" fill="#2196F3" />
+    <rect x="30" y="0" width="10" height="50" fill="#FFC107" />
+    <rect x="45" y="15" width="10" height="35" fill="#F44336" />
+  </g>
+  <!-- Text -->
+  <text x="70" y="40" font-family="Arial, sans-serif" font-size="24" fill="#333">
+    StudiosMate
+  </text>
+</svg>

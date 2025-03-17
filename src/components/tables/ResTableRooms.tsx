@@ -1,0 +1,150 @@
+"use client";
+import React, { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import Input from "@/components/form/input/InputField";
+import { Filter, Search, ChevronLeft, ChevronRight } from "lucide-react";
+
+interface Booking {
+  id: number;
+  roomId: string;
+  guestName: string;
+  checkInDate: string;
+  checkOutDate: string;
+  nights: number;
+  totalCost: number;
+  status: string;
+}
+
+const reservedRooms: Booking[] = [
+  { id: 1, roomId: "201", guestName: "John Doe", checkInDate: "2024-03-10", checkOutDate: "2024-03-15", nights: 5, totalCost: 500, status: "Confirmed" },
+  { id: 2, roomId: "202", guestName: "Alice Smith", checkInDate: "2024-03-12", checkOutDate: "2024-03-14", nights: 2, totalCost: 300, status: "Checked In" },
+  { id: 3, roomId: "203", guestName: "Bob Johnson", checkInDate: "2024-03-05", checkOutDate: "2024-03-10", nights: 5, totalCost: 750, status: "Checked Out" },
+];
+
+const roomTypes = ["All", "Single", "Double", "Suite"];
+const ITEMS_PER_PAGE = 2;
+
+export default function ReservedRooms() {
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRoomType, setSelectedRoomType] = useState("All");
+  const [showFilter, setShowFilter] = useState(false);
+
+  const filteredRooms = reservedRooms.filter(
+    (booking) => booking.roomId.includes(search) || booking.guestName.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredRooms.length / ITEMS_PER_PAGE);
+  const paginatedData = filteredRooms.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <div className="flex flex-col gap-5 px-6 mb-4 mt-4 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">Rooms</h3>
+        <div className="flex gap-3 sm:items-center">
+          <Search className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" size={18} />
+          <Input
+            type="text"
+            placeholder="Search by room ID or guest name..."
+            className="border p-2 rounded-lg"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button className="border p-2 rounded-lg flex items-center gap-2" onClick={() => setShowFilter(!showFilter)}>
+            <Filter size={18} /> Filter
+          </button>
+        </div>
+      </div>
+      {showFilter && (
+        <div className="absolute right-0 mt-10 w-40 bg-white border rounded-lg shadow-lg p-2">
+          {roomTypes.map((type) => (
+            <button
+              key={type}
+              className={`block w-full text-left px-4 py-2 rounded-lg ${selectedRoomType === type ? "bg-blue-500 text-white" : "hover:bg-gray-200"}`}
+              onClick={() => {
+                setSelectedRoomType(type);
+                setShowFilter(false);
+              }}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      )}
+      <Table>
+      <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+          <TableRow>
+          <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >S.No</TableCell>
+            <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Room ID</TableCell>
+            <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Guest Name</TableCell>
+            <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Check-In</TableCell>
+             <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Check-Out</TableCell>
+            <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Nights</TableCell>
+             <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Total Cost ($)</TableCell>
+             <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Status</TableCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+          {paginatedData.map((booking, index) => (
+            <TableRow key={booking.id}>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{index + 1}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.roomId}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.guestName}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.checkInDate}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.checkOutDate}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.nights}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">${booking.totalCost}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.status}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <div className="flex items-center justify-between px-6 py-4 border-t">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="flex items-center gap-1 px-4 py-2 text-gray-600 border rounded-lg disabled:opacity-50"
+        >
+          <ChevronLeft size={18} /> Previous
+        </button>
+        <span className="text-gray-700">Page {currentPage} of {totalPages}</span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="flex items-center gap-1 px-4 py-2 text-gray-600 border rounded-lg disabled:opacity-50"
+        >
+          Next <ChevronRight size={18} />
+        </button>
+      </div>
+    </div>
+  );
+}
