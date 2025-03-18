@@ -100,7 +100,6 @@ export default function ReserveForm() {
  
   const [isDiscountEnabled, setIsDiscountEnabled] = useState(false);
   const [isTaxEnabled, setIsTaxEnabled] = useState(false);
-
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
   const handleSubmit = (e: React.FormEvent) => {
@@ -111,9 +110,7 @@ export default function ReserveForm() {
   };
 
 
-  
 
- 
   const handleScanID = () => {
     // Simulated ID scan result
     const scannedData = {
@@ -155,12 +152,12 @@ export default function ReserveForm() {
     setStayInfo((prev) => ({ ...prev, ratetype: value }));
   };
 
-  const handleDiscountTypeChange = (value: boolean) => {
-    setStayInfo((prev) => ({ ...prev, discountApplied: value }));
+  const handleSelectDiscountType = (value: string) => {
+    setStayInfo((prev) => ({ ...prev, discountType: value }));
   };
 
-  const handleTaxTypeChange = (value: boolean) => {
-    setStayInfo((prev) => ({ ...prev, taxExempt: value }));
+  const handleSelectTaxType = (value: string) => {
+    setStayInfo((prev) => ({ ...prev, taxType: value }));
   };
 
   const handleDateChange = (date: Date[]) => {
@@ -409,17 +406,16 @@ export default function ReserveForm() {
                 {isDiscountEnabled && (
                   <>
                     <Select
-                                        options={[{ value: "percentage", label: "Percentage" }, { value: "value", label: "Value" }]}
-                                        placeholder="Select Discount Type"
-                                        defaultValue="" onChange={function (value: string): void {
-                                            throw new Error("Function not implemented.");
-                                        } }                      
+                      options={[{ value: "percentage", label: "Percentage" }, { value: "value", label: "Value" }]}
+                      placeholder="Select Discount Type"
+                      defaultValue=""
+                      onChange={handleSelectDiscountType}
                     />
                     <Input
                       type="text"
                       placeholder="Discount Value"
                       defaultValue={stayInfo.discountValue}
-                   
+                      onChange={(e) => handleInputChange("stay","discountValue", e.target.value)} 
                       className="mt-2"
                     />
                   </>
@@ -437,17 +433,16 @@ export default function ReserveForm() {
                 {isTaxEnabled && (
                   <>
                     <Select
-                                        options={[{ value: "fexempt", label: "Full Exempt" }, { value: "stateexempt", label: "State Exempt" }]}
-                                        placeholder="Select Tax Type"
-
-                                        defaultValue="0" onChange={function (value: string): void {
-                                            throw new Error("Function not implemented.");
-                                        } }                    />
+                      options={[{ value: "fexempt", label: "Full Exempt" }, { value: "stateexempt", label: "State Exempt" }]}
+                      placeholder="Select Tax Type"
+                      onChange={handleSelectTaxType}
+                      defaultValue="0"
+                    />
                     <Input
                       type="text"
                       placeholder="Tax Percentage"
                       defaultValue={stayInfo.taxPercentage}
-                   
+                      onChange={(e) => handleInputChange("stay","taxPercentage", e.target.value)} 
                       className="mt-2"
                     />
                   </>
