@@ -409,16 +409,17 @@ export default function ReserveForm() {
                 {isDiscountEnabled && (
                   <>
                     <Select
-                      options={[{ value: "percentage", label: "Percentage" }, { value: "value", label: "Value" }]}
-                      placeholder="Select Discount Type"
-                      defaultValue=""
-                      onChange={handleDiscountTypeChange}
+                                        options={[{ value: "percentage", label: "Percentage" }, { value: "value", label: "Value" }]}
+                                        placeholder="Select Discount Type"
+                                        defaultValue="" onChange={function (value: string): void {
+                                            throw new Error("Function not implemented.");
+                                        } }                      
                     />
                     <Input
                       type="text"
                       placeholder="Discount Value"
                       defaultValue={stayInfo.discountValue}
-                      onChange={handleDiscountValueChange}
+                   
                       className="mt-2"
                     />
                   </>
@@ -436,16 +437,17 @@ export default function ReserveForm() {
                 {isTaxEnabled && (
                   <>
                     <Select
-                      options={[{ value: "fexempt", label: "Full Exempt" }, { value: "stateexempt", label: "State Exempt" }]}
-                      placeholder="Select Tax Type"
-                      onChange={handleTaxTypeChange}
-                      defaultValue="0"
-                    />
+                                        options={[{ value: "fexempt", label: "Full Exempt" }, { value: "stateexempt", label: "State Exempt" }]}
+                                        placeholder="Select Tax Type"
+
+                                        defaultValue="0" onChange={function (value: string): void {
+                                            throw new Error("Function not implemented.");
+                                        } }                    />
                     <Input
                       type="text"
                       placeholder="Tax Percentage"
                       defaultValue={stayInfo.taxPercentage}
-                      onChange={handleDiscountValueChange}
+                   
                       className="mt-2"
                     />
                   </>
