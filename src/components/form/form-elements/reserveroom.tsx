@@ -67,34 +67,6 @@ interface GuestInfo {
     swiftCode?: string;
     companyName?: string;
   }
-  
-export default function ReserveForm() {
-  const [step, setStep] = useState(1);
-  const [bookingType, setBookingType] = useState("single");
-  const [guestInfo, setGuestInfo] = useState<GuestInfo>({});
-  const [stayInfo, setStayInfo] = useState<StayInfo>({});
-  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({});
-  const { isOpen, openModal, closeModal } = useModal();
-  const [isDailyRatesEnabled, setIsDailyRatesEnabled] = useState(false);
-  const [isDiscountEnabled, setIsDiscountEnabled] = useState(false);
-  const [isTaxEnabled, setIsTaxEnabled] = useState(false);
-  const [discountType, setDiscountType] = useState("percentage");
-  const [discountValue, setDiscountValue] = useState("");
-  const handleNext = () => setStep((prev) => prev + 1);
-  const handlePrev = () => setStep((prev) => prev - 1);
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Guest Info:", guestInfo);
-    console.log("Stay Info:", stayInfo);
-    console.log("Payment Info:", paymentInfo);
-  };
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
-
-  
-  const handleDiscountValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDiscountValue(e.target.value);
-  };
-
   const optionsGender = [
     { value: "male", label: "Male" },
     { value: "female", label: "Female" },
@@ -125,7 +97,36 @@ export default function ReserveForm() {
     { value: "directbilling", label: "Direct Billing" }
   ];
 
+  
+export default function ReserveForm() {
+  const [step, setStep] = useState(1);
+  const [bookingType, setBookingType] = useState("single");
+  const [guestInfo, setGuestInfo] = useState<GuestInfo>({});
+  const [stayInfo, setStayInfo] = useState<StayInfo>({});
+  const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({});
+  const { isOpen, openModal, closeModal } = useModal();
+  const [isDailyRatesEnabled, setIsDailyRatesEnabled] = useState(false);
+  const [isDiscountEnabled, setIsDiscountEnabled] = useState(false);
+  const [isTaxEnabled, setIsTaxEnabled] = useState(false);
+  const [discountType, setDiscountType] = useState("percentage");
+  const [discountValue, setDiscountValue] = useState("");
+  const handleNext = () => setStep((prev) => prev + 1);
+  const handlePrev = () => setStep((prev) => prev - 1);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Guest Info:", guestInfo);
+    console.log("Stay Info:", stayInfo);
+    console.log("Payment Info:", paymentInfo);
+  };
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
+  
+  const handleDiscountValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDiscountValue(e.target.value);
+  };
+
+ 
+ 
   const handleScanID = () => {
     // Simulated ID scan result
     const scannedData = {
@@ -171,7 +172,7 @@ export default function ReserveForm() {
     setStayInfo((prev) => ({ ...prev, discountApplied: value }));
   };
 
-  const handleTaxChange = (value: boolean) => {
+  const handleTaxTypeChange = (value: boolean) => {
     setStayInfo((prev) => ({ ...prev, taxExempt: value }));
   };
 
@@ -180,6 +181,19 @@ export default function ReserveForm() {
  setGuestInfo(prev => ({...prev, dob: date[0].toLocaleDateString() // Format the date
         }));        
   };};
+
+  const handleCheckInDateChange = (date: Date[]) => {
+    if (date.length > 0) {
+ setStayInfo(prev => ({...prev, checkInDate: date[0].toLocaleDateString() // Format the date
+        }));        
+  };};
+  const handleCheckOutDateChange = (date: Date[]) => {
+    if (date.length > 0) {
+        setStayInfo(prev => ({...prev, checkOutDate: date[0].toLocaleDateString() // Format the date
+        }));        
+  };};
+
+
 
   useEffect(() => {
     calculateTotal();
@@ -312,14 +326,11 @@ export default function ReserveForm() {
             <Input type="text" placeholder="Reference" defaultValue={guestInfo.reference || ''} onChange={(e) => handleInputChange("guest","reference", e.target.value)} />
         </div>
              </div>
-          </div>
-        );
-      case 2:
-        return (
-            <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2 dark:text-white/90">Stay Information</h3>
+             <div>
+             <h3 className="text-lg font-semibold text-gray-800 mb-2 mt-8 pt-4 dark:text-white/90 border-t border-gray-200 dark:border-gray-800">Stay Information</h3>
+    
             <div className="grid grid-cols-4 gap-4">
-           {/*  <div className="col-span-2 sm:col-span-1">
+            <div className="col-span-2 sm:col-span-1">
             <Label htmlFor="gender">Select Room Type</Label>
             <Select
               options={roomtypes}
@@ -328,31 +339,14 @@ export default function ReserveForm() {
               defaultValue={stayInfo.roomtype || ''} 
               className="bg-gray-50 dark:bg-gray-800"
             />
-            </div> */}
-
-            <div className="col-span-2 sm:col-span-1">
-            <div className="relative">
-          <MultiSelect
-            label="Select Room Types"
-            options={multiOptions}
-            defaultSelected={[]}
-            onChange={(values) => setSelectedValues(values)}
-          />
-          <p className="sr-only">
-            Selected Values: {selectedValues.join(", ")}
-          </p>
-        </div>
-        <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
-              <ChevronDownIcon/>
-            </span>
-        </div>
+            </div>
 
             <div className="col-span-2 sm:col-span-1">
         <Label htmlFor="lastName">Check-in Date</Label>
             <div className="relative w-full flatpickr-wrapper">
               <Flatpickr
                 value={stayInfo.checkInDate || ''} // Set the value to the state
-                onChange={handleDateChange} // Handle the date change
+                onChange={handleCheckInDateChange} // Handle the date change
                 options={{
                   dateFormat: "Y-m-d", // Set the date format
                 }}
@@ -368,7 +362,7 @@ export default function ReserveForm() {
             <div className="relative w-full flatpickr-wrapper">
               <Flatpickr
                 value={stayInfo.checkOutDate || ''} // Set the value to the state
-                onChange={handleDateChange} // Handle the date change
+                onChange={handleCheckOutDateChange} // Handle the date change
                 options={{
                   dateFormat: "Y-m-d", // Set the date format
                 }}
@@ -406,7 +400,7 @@ export default function ReserveForm() {
             <Select
               options={ratetypes}
               placeholder="Select Rate Type"
-              onChange={handleSelectRoomType}
+              onChange={handleSelectRateType}
               defaultValue={stayInfo.ratetype || ''} 
               className="bg-gray-50 dark:bg-gray-800"
             />
@@ -414,7 +408,7 @@ export default function ReserveForm() {
 
             <div className="col-span-2 sm:col-span-1">
             <Label>Daily Rates</Label>
-            <Input type="number" placeholder="Daily Rates" />
+            <Input type="number" placeholder="Daily Rates"  defaultValue={stayInfo.dailyRate}/>
             </div>
 
             <div className="col-span-2 sm:col-span-1">
@@ -436,7 +430,7 @@ export default function ReserveForm() {
                     <Input
                       type="text"
                       placeholder="Discount Value"
-                      defaultValue={discountValue}
+                      defaultValue={stayInfo.discountValue}
                       onChange={handleDiscountValueChange}
                       className="mt-2"
                     />
@@ -455,15 +449,15 @@ export default function ReserveForm() {
                 {isTaxEnabled && (
                   <>
                     <Select
-                      options={[{ value: "percentage", label: "Percentage" }, { value: "value", label: "Value" }]}
+                      options={[{ value: "fexempt", label: "Full Exempt" }, { value: "stateexempt", label: "State Exempt" }]}
                       placeholder="Select Tax Type"
-                      onChange={handleDiscountTypeChange}
-                      defaultValue=""
+                      onChange={handleTaxTypeChange}
+                      defaultValue="0"
                     />
                     <Input
                       type="text"
                       placeholder="Tax Percentage"
-                      defaultValue={discountValue}
+                      defaultValue={stayInfo.taxPercentage}
                       onChange={handleDiscountValueChange}
                       className="mt-2"
                     />
@@ -516,9 +510,10 @@ export default function ReserveForm() {
             </div>
             </div>
           </div>
+          </div>
           
         );
-      case 3:
+      case 2:
         return (
             <div>
               <h3>Review and Submit</h3>
@@ -536,7 +531,7 @@ export default function ReserveForm() {
         {renderStep()}
         <div className="flex justify-between mt-6">
           {step > 1 && <Button onClick={handlePrev} size="sm">Previous</Button>}
-          {step < 3 ? <Button onClick={handleNext} size="sm" >Next</Button> : <Button size="sm">Submit</Button>}
+          {step < 2 ? <Button onClick={handleNext} size="sm" >Next</Button> : <Button size="sm">Submit</Button>}
         </div>
       </Form>
     </ComponentCard>
