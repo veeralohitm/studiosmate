@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Input from "@/components/form/input/InputField";
-import { Filter, ChevronDown } from "lucide-react";
+import { Filter } from "lucide-react";
 
 interface Room {
   id: number;
@@ -19,10 +19,6 @@ interface Room {
   ytdBookings: number;
 }
 import {
-    Pencil,
-    ToggleLeft,
-    ToggleRight,
-    PlusCircle,
     Search,
     ChevronLeft,
     ChevronRight,

@@ -4,24 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
-import { Settings ,ClipboardMinus, Construction, UserPen, School, Mail,BookOpenText,NotebookPen} from "lucide-react";
+import { ClipboardMinus, Construction, UserPen, School, Mail,BookOpenText,NotebookPen} from "lucide-react";
 import {
-  BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
   ListIcon,
   PageIcon,
-  PieChartIcon,
-  PlugInIcon,
   TableIcon,
   UserCircleIcon,
   UserMngmt,
-  MotelMngmt,
-  BoltIcon
+  MotelMngmt
 } from "../icons/index";
-import { Hotel } from "lucide-react";
 type NavItem = {
   name: string;
   icon: React.ReactNode;

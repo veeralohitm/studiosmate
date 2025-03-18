@@ -9,7 +9,6 @@ import {
 } from "../ui/table";
 import Input from "../form/input/InputField";
 import Badge from "../ui/badge/Badge";
-import Image from "next/image";
 import {
   Pencil,
   ToggleLeft,

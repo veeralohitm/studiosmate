@@ -20,22 +20,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-interface Order {
-  id: number;
-  user: {
-    image: string;
-    name: string;
-    userid: string;
-  };
-  role: string;
-  email: string;
-  team: {
-    images: string[];
-  };
-  status: string;
-  budget: string;
-  isEnabled: boolean;
-}
 
 const tableData = [
   {

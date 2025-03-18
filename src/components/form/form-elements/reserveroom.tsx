@@ -12,8 +12,6 @@ import { CalenderIcon } from "@/icons";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import TextArea from "../input/TextArea";
-import MultiSelect from "../MultiSelect";
-import { ChevronDownIcon } from "@/icons";
 
 interface GuestInfo {
     firstName?: string;
@@ -79,11 +77,6 @@ interface GuestInfo {
     { value: "suite", label: "Suite" },
   ];
 
-  const multiOptions = [
-    { value: "single", text: "Single", selected: false },
-    { value: "double", text: "Double", selected: false },
-    { value: "suite", text: "Suite", selected: false },
-  ];
 
   const ratetypes = [
     { value: "weekend", label: "Weekend" },
@@ -100,16 +93,14 @@ interface GuestInfo {
   
 export default function ReserveForm() {
   const [step, setStep] = useState(1);
-  const [bookingType, setBookingType] = useState("single");
   const [guestInfo, setGuestInfo] = useState<GuestInfo>({});
   const [stayInfo, setStayInfo] = useState<StayInfo>({});
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({});
   const { isOpen, openModal, closeModal } = useModal();
-  const [isDailyRatesEnabled, setIsDailyRatesEnabled] = useState(false);
+ 
   const [isDiscountEnabled, setIsDiscountEnabled] = useState(false);
   const [isTaxEnabled, setIsTaxEnabled] = useState(false);
-  const [discountType, setDiscountType] = useState("percentage");
-  const [discountValue, setDiscountValue] = useState("");
+
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrev = () => setStep((prev) => prev - 1);
   const handleSubmit = (e: React.FormEvent) => {
@@ -118,14 +109,10 @@ export default function ReserveForm() {
     console.log("Stay Info:", stayInfo);
     console.log("Payment Info:", paymentInfo);
   };
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+
 
   
-  const handleDiscountValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDiscountValue(e.target.value);
-  };
 
- 
  
   const handleScanID = () => {
     // Simulated ID scan result

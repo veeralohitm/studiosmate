@@ -1,6 +1,4 @@
-import { Metadata } from "next";
 import React from "react";
-import ReservedRooms from "@/components/tables/ResTableRooms";
 
 
 export default function Mail() {
