@@ -12,6 +12,7 @@ import { CalenderIcon } from "@/icons";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import TextArea from "../input/TextArea";
+import Radio from "../input/Radio";
 
 interface GuestInfo {
     firstName?: string;
@@ -97,19 +98,18 @@ export default function ReserveForm() {
   const [stayInfo, setStayInfo] = useState<StayInfo>({});
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({});
   const { isOpen, openModal, closeModal } = useModal();
+  const [selectedOption, setSelectedOption] = useState<string>("Free");
  
   const [isDiscountEnabled, setIsDiscountEnabled] = useState(false);
   const [isTaxEnabled, setIsTaxEnabled] = useState(false);
-  const handleNext = () => setStep((prev) => prev + 1);
-  const handlePrev = () => setStep((prev) => prev - 1);
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Guest Info:", guestInfo);
-    console.log("Stay Info:", stayInfo);
-    console.log("Payment Info:", paymentInfo);
-  };
-
-
+  // const handleNext = () => setStep((prev) => prev + 1);
+  // const handlePrev = () => setStep((prev) => prev - 1);
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   console.log("Guest Info:", guestInfo);
+  //   console.log("Stay Info:", stayInfo);
+  //   console.log("Payment Info:", paymentInfo);
+  // };
 
   const handleScanID = () => {
     // Simulated ID scan result
@@ -158,6 +158,11 @@ export default function ReserveForm() {
 
   const handleSelectTaxType = (value: string) => {
     setStayInfo((prev) => ({ ...prev, taxType: value }));
+  };
+
+  const handleRadioChange = (value: string) => {
+    setSelectedOption(value);
+    console.log("Selected:", value);
   };
 
   const handleDateChange = (date: Date[]) => {
@@ -225,8 +230,29 @@ export default function ReserveForm() {
       case 1:
         return (
           <div>
+            <div className="flex items-center gap-3 mb-2 col-span-full">
+            <Label className="m-0">Reservation Type:</Label>
+            <div className="flex flex-wrap items-center gap-4">
+              <Radio
+                id="Reserve a Room"
+                name="roleSelect"
+                value="Free"
+                label="Reserve a Room"
+                checked={selectedOption === "Free"}
+                onChange={handleRadioChange}
+              />
+              <Radio
+                id="Walk-in"
+                name="roleSelect"
+                value="Premium"
+                label="Walk-in"
+                checked={selectedOption === "Premium"}
+                onChange={handleRadioChange}
+              />
+            </div>
+          </div>
     <div className="flex flex-col mb-4 sm:flex-row sm:items-center sm:justify-between">
-   
+    
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
         Guest Information
       </h3>
@@ -473,25 +499,56 @@ export default function ReserveForm() {
     </Modal>
     <h3 className="text-lg font-semibold text-gray-800 mb-2 mt-8 pt-4 dark:text-white/90 border-t border-gray-200 dark:border-gray-800">Payment Information</h3>
     
-    <div className="col-span-2 sm:col-span-1">
+   
+            <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-2 sm:col-span-1">
             <Label htmlFor="gender">Select Payment Type</Label>
             <Select
               options={paymenttypes}
               placeholder="Select Payment Type"
-              onChange={handleSelectRoomType}
+              onChange={handleSelectRateType}
               defaultValue={stayInfo.ratetype || ''} 
               className="bg-gray-50 dark:bg-gray-800"
             />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-        <div className="col-span-2 mt-2 sm:col-span-1">
+            {stayInfo.ratetype === "cash" && (
+              <div>
+
+               <div className="col-span-2 sm:col-span-1">
+                 <Label htmlFor="email">Amount</Label>
+                <Input placeholder="Amount"  />
+             </div>
+             <div className="col-span-2 mt-4 sm:col-span-1">
         <Label htmlFor="email">Reference</Label>
             <TextArea
               placeholder="Type your message here..."
-              rows={4}
+              rows={1}
               className=" bg-gray-50 dark:bg-gray-800"
             />
             </div>
+             </div>
+             )}
+             {stayInfo.ratetype === "directbilling" && (
+              <div>
+             <div className="col-span-2 sm:col-span-1">
+        <Label htmlFor="email">Select Exsisting Customer:</Label>
+        <Select
+                      options={[{ value: "percentage", label: "ODU" }, { value: "value", label: "SAS" }]}
+                      placeholder="Select Customer"
+                      defaultValue=""
+                      onChange={handleSelectDiscountType}
+                    />
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+            <button
+            className="flex w-full items-center h-11 justify-center mt-4 gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
+          >
+            Add New Customer
+          </button>
+              </div>
+             </div>
+             )}
+    
             </div>
           </div>
           </div>
@@ -500,7 +557,7 @@ export default function ReserveForm() {
       case 2:
         return (
             <div>
-              <h3>Review and Submit</h3>
+              <h3>Invoice</h3>
               <pre>{JSON.stringify({ guestInfo, stayInfo, paymentInfo }, null, 2)}</pre>
             </div>
           );
@@ -511,14 +568,22 @@ export default function ReserveForm() {
 
   return (
     <ComponentCard title="Room Reservation Form">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={(e) => {
+        e.preventDefault();
+        setStep(2);
+      }}>
         {renderStep()}
         <div className="flex justify-between mt-6">
-          {step > 1 && <Button onClick={handlePrev} size="sm">Previous</Button>}
-          {step < 2 ? <Button onClick={handleNext} size="sm" >Next</Button> : <Button size="sm">Submit</Button>}
+          {step === 1 ? (
+            <Button size="sm" >Submit</Button>
+          ) : (
+            <div>
+            <Button size="sm" onClick={() => window.print()}>Print</Button>
+            <Button size="sm" onClick={() => window.print()} className="ml-3">Cancel Reservation</Button>
+            </div>
+          )}
         </div>
       </Form>
     </ComponentCard>
   );
-  
 }

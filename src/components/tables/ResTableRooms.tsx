@@ -12,19 +12,24 @@ import { Filter, Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Booking {
   id: number;
+  bookingid:string;
   roomId: string;
   guestName: string;
+  city:string;
+  state: string;
   checkInDate: string;
   checkOutDate: string;
-  nights: number;
-  totalCost: number;
+  roomtype: string;
+  paymenttype: string;
   status: string;
+  refrence:string;
+  deposit:number;
 }
 
 const reservedRooms: Booking[] = [
-  { id: 1, roomId: "201", guestName: "John Doe", checkInDate: "2024-03-10", checkOutDate: "2024-03-15", nights: 5, totalCost: 500, status: "Confirmed" },
-  { id: 2, roomId: "202", guestName: "Alice Smith", checkInDate: "2024-03-12", checkOutDate: "2024-03-14", nights: 2, totalCost: 300, status: "Checked In" },
-  { id: 3, roomId: "203", guestName: "Bob Johnson", checkInDate: "2024-03-05", checkOutDate: "2024-03-10", nights: 5, totalCost: 750, status: "Checked Out" },
+  { id: 1, bookingid:"STDS2345678",roomId: "201", guestName: "John Doe",city:"Norfolk", state:"VA", checkInDate: "2024-03-10", checkOutDate: "2024-03-15", roomtype: "Single", paymenttype:"Cash",deposit: 500, status: "Confirmed" ,refrence:"Random text"},
+  { id: 2, bookingid:"STDS2345588",roomId: "202", guestName: "Alice Smith",city:"VA Beach",state:"VA", checkInDate: "2024-03-12", checkOutDate: "2024-03-14", roomtype: "Double",paymenttype:"Card", deposit: 300, status: "Checked In" ,refrence:""},
+  { id: 3, bookingid:"STDS2345688",roomId: "203", guestName: "Bob Johnson", city:"Chesapeake",state:"VA",checkInDate: "2024-03-05", checkOutDate: "2024-03-10", roomtype: "Suite",paymenttype:"Card", deposit: 750, status: "Checked Out" ,refrence:""},
 ];
 
 const roomTypes = ["All", "Single", "Double", "Suite"];
@@ -86,11 +91,23 @@ export default function ReservedRooms() {
             <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >Room ID</TableCell>
+                >Booking ID</TableCell>
+                 <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Room Number</TableCell>
             <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >Guest Name</TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >City</TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >State</TableCell>
             <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -99,31 +116,44 @@ export default function ReservedRooms() {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >Check-Out</TableCell>
-            <TableCell
+                <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >Nights</TableCell>
+                >Room Type</TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Payment Type</TableCell>
              <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >Total Cost ($)</TableCell>
+                >Deposit ($)</TableCell>
              <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >Status</TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Reference</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
           {paginatedData.map((booking, index) => (
             <TableRow key={booking.id}>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{index + 1}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.bookingid}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.roomId}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.guestName}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.city}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.state}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.checkInDate}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.checkOutDate}</TableCell>
-               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.nights}</TableCell>
-               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">${booking.totalCost}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.roomtype}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.paymenttype}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">${booking.deposit}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.status}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{booking.refrence}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -6,36 +6,45 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import Input from "@/components/form/input/InputField";
+} from "../ui/table";
+import Input from "../form/input/InputField";
+import {
+  Plus,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { useModal } from "../../hooks/useModal";
+import { Modal } from "../ui/modal";
+import Button from "../ui/button/Button";
+import Label from "../form/Label";
 
 interface Room {
-  id: number;
-  roomId: string;
-  roomType: string;
-  rate: number;
-  lastBooked: string;
-  ytdBookings: number;
-}
-import {
-    Search,
-    ChevronLeft,
-    ChevronRight,
-  } from "lucide-react";
+    id: number;
+    roomId: string;
+    roomType: string;
+    lastCleaned: string;
+    checkOutDate: string;
+    status: string;
+    maintncetype: string;
+    notes: string;
+  }
+  
 const vacantRooms: Room[] = [
-  { id: 1, roomId: "101", roomType: "Single", rate: 100, lastBooked: "2024-03-01", ytdBookings: 5 },
-  { id: 2, roomId: "102", roomType: "Double", rate: 150, lastBooked: "2024-02-20", ytdBookings: 8 },
-  { id: 3, roomId: "103", roomType: "Suite", rate: 200, lastBooked: "2024-01-15", ytdBookings: 3 },
-];
-const roomTypes = ["All", "Single", "Double", "Suite"];
+    { id: 1, roomId: "101", roomType: "Single", lastCleaned: "2024-03-01",checkOutDate: "2024-03-15", status:"Under Progress", maintncetype: "Flooring",notes:"" },
+    { id: 2, roomId: "102", roomType: "Double", lastCleaned: "2024-02-20",checkOutDate: "2024-03-15",status:"Checked Out", maintncetype: "Bathroom",notes:"tap leaking" },
+    { id: 3, roomId: "103", roomType: "Suite",  lastCleaned: "2024-01-15",checkOutDate: "2024-03-15",status:"Maintanance Issue", maintncetype: "AC",notes:"not cooling" },
+  ];
+  const roomTypes = ["All", "Single", "Double", "Suite"];
 const ITEMS_PER_PAGE = 2;
+export default function MaintnceTable() {
 
-export default function AvailableRooms() {
-  const [search, setSearch] = useState("");
-  const [selectedRoomType, setSelectedRoomType] = useState("All");
+ const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRoomType, setSelectedRoomType] = useState("All");
+  const { isOpen, openModal, closeModal } = useModal();
   const [showFilter, setShowFilter] = useState(false);
- 
+
   const filteredRooms = vacantRooms.filter((room) =>
     (room.roomId.includes(search) || room.roomType.toLowerCase().includes(search.toLowerCase())) &&
     (selectedRoomType === "All" || room.roomType === selectedRoomType)
@@ -45,13 +54,18 @@ export default function AvailableRooms() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+  const handleSave = () => {
+    // Handle save logic here
+    console.log("Saving changes...");
+    closeModal();
+  };
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-    <div className="flex flex-col gap-5 px-6 mb-4 mt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-5 px-6 mb-4 mt-4 sm:flex-row sm:items-center sm:justify-between">
   {/* Title */}
   <div>
     <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-       Vacant Rooms
+      Maintanence Rooms
     </h3>
   </div>
 
@@ -92,7 +106,7 @@ export default function AvailableRooms() {
 
       {/* Dropdown */}
       {showFilter && (
-        <div className="absolute left-0 top-full mt-2 min-w-[10rem] md:w-20 bg-white border rounded-lg shadow-lg p-1 z-50">
+        <div className="absolute left-0 top-full mt-2 min-w-[10rem] md:w-40 bg-white border rounded-lg shadow-lg p-1 z-50">
           {roomTypes.map((type) => (
             <button
               key={type}
@@ -110,8 +124,18 @@ export default function AvailableRooms() {
         </div>
       )}
     </div>
+
+    {/* Add Room Button */}
+    <button
+      onClick={openModal}
+      className="flex w-full sm:w-auto items-center h-11 justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+    >
+      <Plus size={18} />
+      Add Room
+    </button>
   </div>
 </div>
+
       <Table>
       <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
           <TableRow>
@@ -127,18 +151,26 @@ export default function AvailableRooms() {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >Room Type</TableCell>
-            <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >Rate ($)</TableCell>
            <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >Last Booked</TableCell>
-           <TableCell
+                >Last Cleaned</TableCell>
+                <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >YTD Bookings</TableCell>
+                >Check-out Date</TableCell>
+                 <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Maintanence Type</TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Notes</TableCell>
+                  <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >Actions</TableCell>
           </TableRow>
         </TableHeader>
         <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
@@ -147,13 +179,60 @@ export default function AvailableRooms() {
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{index + 1}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.roomId}</TableCell>
                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.roomType}</TableCell>
-               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">${room.rate}</TableCell>
-               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.lastBooked}</TableCell>
-               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.ytdBookings}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.lastCleaned}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.checkOutDate}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.maintncetype}</TableCell>
+               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{room.notes}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+       {/* Modal */}
+       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
+        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
+          <div className="px-2 pr-14">
+            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+              Add Room
+            </h4>
+            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+              Fill necessary details to add room for maintenance.
+            </p>
+          </div>
+          <form className="flex flex-col">
+            <div className="px-2 overflow-y-auto custom-scrollbar">
+              <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                <div>
+                  <Label>Country</Label>
+                  <Input type="text" defaultValue="United States" />
+                </div>
+
+                <div>
+                  <Label>City/State</Label>
+                  <Input type="text" defaultValue="Arizona, United States." />
+                </div>
+
+                <div>
+                  <Label>Postal Code</Label>
+                  <Input type="text" defaultValue="ERT 2489" />
+                </div>
+
+                <div>
+                  <Label>TAX ID</Label>
+                  <Input type="text" defaultValue="AS4568384" />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+              <Button size="sm" variant="outline" onClick={closeModal}>
+                Close
+              </Button>
+              <Button size="sm" onClick={handleSave}>
+                Add Room
+              </Button>
+            </div>
+          </form>
+        </div>
+      </Modal>
       {/* Pagination */}
       <div className="flex items-center justify-between px-6 py-4 border-t">
         <button

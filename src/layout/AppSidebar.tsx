@@ -9,9 +9,7 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
   PageIcon,
-  TableIcon,
   UserCircleIcon,
   UserMngmt,
   MotelMngmt
@@ -45,8 +43,8 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Available Rooms", path: "/avlrooms"},
       { name: "Reserved Rooms", path: "/reservedrooms"},
-      { name: "Reserve a Room", path: "/reserve" },
-      { name: "Walk-In", path: "/walkin"},
+      { name: "Reserve / Walk-in", path: "/reserve" },
+      // { name: "Walk-In", path: "/walkin"},
     ],
   },
   // {
@@ -84,24 +82,24 @@ const navItems: NavItem[] = [
     name: "Audit",
     path: "/audit",
   },
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
-  },
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  // },
+  // {
+  //   name: "Tables",
+  //   icon: <TableIcon />,
+  //   subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+  // },
+  // {
+  //   name: "Pages",
+  //   icon: <PageIcon />,
+  //   subItems: [
+  //     { name: "Blank Page", path: "/blank", pro: false },
+  //     { name: "404 Error", path: "/error-404", pro: false },
+  //   ],
+  // },
 ];
 
 const othersItems: NavItem[] = [

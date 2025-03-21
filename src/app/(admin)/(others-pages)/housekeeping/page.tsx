@@ -1,4 +1,5 @@
 import React from "react";
+import HkTable from "@/components/tables/HkTable";
 
 export default function HouseKeeping() {
   return (
@@ -8,7 +9,7 @@ export default function HouseKeeping() {
         House Keeping
         </h3>
         <div className="space-y-6">
-       
+       <HkTable />
         </div>
       </div>
     </div>

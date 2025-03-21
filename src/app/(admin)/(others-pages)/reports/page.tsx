@@ -1,3 +1,4 @@
+import ReportTabs from "@/components/tables/ReportTabs";
 import React from "react";
 
 export default function Reports() {
@@ -8,7 +9,7 @@ export default function Reports() {
         Reports
         </h3>
         <div className="space-y-6">
-        
+        <ReportTabs />
         </div>
       </div>
     </div>

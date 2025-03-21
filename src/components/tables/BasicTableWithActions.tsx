@@ -14,12 +14,15 @@ import {
   Pencil,
   ToggleLeft,
   ToggleRight,
-  PlusCircle,
+  Plus,
   Search,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-
+import { useModal } from "../../hooks/useModal";
+import { Modal } from "../ui/modal";
+import Button from "../ui/button/Button";
+import Label from "../form/Label";
 
 const tableData = [
   {
@@ -64,7 +67,7 @@ export default function BasicTableWithActions() {
 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [showModal, setShowModal] = useState(false);
+  const { isOpen, openModal, closeModal } = useModal();
   
   const filteredData = tableData.filter((order) =>
     order.user.name.toLowerCase().includes(search.toLowerCase())
@@ -75,6 +78,11 @@ export default function BasicTableWithActions() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+  const handleSave = () => {
+    // Handle save logic here
+    console.log("Saving changes...");
+    closeModal();
+  };
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="flex flex-col gap-5 px-6 mb-4 mt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -85,20 +93,22 @@ export default function BasicTableWithActions() {
     </div>
     <div className="flex gap-3 sm:items-center">
           <div className="relative">
-            <Search className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400 " size={18} />
             <Input
               type="text"
               placeholder="Search users..."
-              className="pl-10 pr-4 py-2 border rounded-lg"
+              className="pl-10 pr-4 py-2 border rounded-lg h-10"
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
+             onClick={openModal}
+            className="flex w-full items-center h-11 justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
           >
-            <PlusCircle size={18} /> Add User
+            <Plus size={18} />
+            Add User
           </button>
+
         </div>
   </div>
       <div className="max-w-full overflow-x-auto">
@@ -188,16 +198,51 @@ export default function BasicTableWithActions() {
 
       </div>
        {/* Modal */}
-       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">Create User</h2>
-            <Input type="text" placeholder="Name" className="mb-2 w-full" />
-            <Input type="email" placeholder="Email" className="mb-2 w-full" />
-            <button onClick={() => setShowModal(false)} className="mt-2 bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
+        <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
+          <div className="px-2 pr-14">
+            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+              Create User
+            </h4>
+            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+              Fill necessary details to create a new user.
+            </p>
           </div>
+          <form className="flex flex-col">
+            <div className="px-2 overflow-y-auto custom-scrollbar">
+              <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                <div>
+                  <Label>Country</Label>
+                  <Input type="text" defaultValue="United States" />
+                </div>
+
+                <div>
+                  <Label>City/State</Label>
+                  <Input type="text" defaultValue="Arizona, United States." />
+                </div>
+
+                <div>
+                  <Label>Postal Code</Label>
+                  <Input type="text" defaultValue="ERT 2489" />
+                </div>
+
+                <div>
+                  <Label>TAX ID</Label>
+                  <Input type="text" defaultValue="AS4568384" />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+              <Button size="sm" variant="outline" onClick={closeModal}>
+                Close
+              </Button>
+              <Button size="sm" onClick={handleSave}>
+                Create User
+              </Button>
+            </div>
+          </form>
         </div>
-      )}
+      </Modal>
        {/* Pagination */}
        <div className="flex items-center justify-between px-6 py-4 border-t">
         <button

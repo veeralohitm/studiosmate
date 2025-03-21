@@ -1,5 +1,5 @@
 import React from "react";
-
+import MaintnceTable from "@/components/tables/MaintnceTable";
 
 export default function Maintenance() {
   return (
@@ -9,7 +9,7 @@ export default function Maintenance() {
         Maintenance
         </h3>
         <div className="space-y-6">
-        
+          <MaintnceTable />
         </div>
       </div>
     </div>
